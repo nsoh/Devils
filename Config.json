@@ -1,19 +1,34 @@
 {
-    "command" : "generate",
-    "tasks" : [
+    "generateTask" : [
          {
-            "name" : "service",
-            "output" : "",
+            "handlerKey" : "service",
             "views" : []
          },
          {
-             "name": "action",
-             "" : "",
+             "handlerKey": "action",
              "views" : [
                  {
-                    "file" : "Actions/${ActionName}Action.cs",
-                    "view" : [
+                    "filePath" : "Action/${ActionName}Action.cs",
+                    "generateCode" : [
                         "class ${ActionName}Action",
+                        "{",
+                        "   // TODO :???",
+                        "}"
+                    ]        
+                 },
+                 {
+                    "filePath" : "Proto/${ActionName}Request.cs",
+                    "generateCode" : [
+                        "class ${ActionName}Request",
+                        "{",
+                        "   // TODO :???",
+                        "}"
+                    ]        
+                 },
+                 {
+                    "filePath" : "Proto/${ActionName}Response.cs",
+                    "generateCode" : [
+                        "class ${ActionName}Response",
                         "{",
                         "   // TODO :???",
                         "}"

@@ -24,7 +24,7 @@ namespace Devils
         {
             var handler = new TaskHandler<IGenerate>();
             handler.Add("service", new GenerateService());
-
+            handler.Add("action", new GenerateAction());
 
             var task = handler.Find(args[1]);
             if(null == task)
