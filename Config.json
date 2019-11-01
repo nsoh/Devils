@@ -1,0 +1,25 @@
+{
+    "command" : "generate",
+    "tasks" : [
+         {
+            "name" : "service",
+            "output" : "",
+            "views" : []
+         },
+         {
+             "name": "action",
+             "" : "",
+             "views" : [
+                 {
+                    "file" : "Actions/${ActionName}Action.cs",
+                    "view" : [
+                        "class ${ActionName}Action",
+                        "{",
+                        "   // TODO :???",
+                        "}"
+                    ]        
+                 }
+             ]
+         }
+     ]
+ }
