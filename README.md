@@ -6,10 +6,7 @@
 >프로젝트에 새로운 코드를 생성하는 명령입니다. 
 
 
-##### devils new service [name]
-##### devils new action [name] [service]  
-##### devils new entity [name] [service] [var-name] [type] ... --pk [col1, col2, ...]
-##### devils new template [service] [path]
+##### devils new --service [serviceName]
+##### devils new --action [actionName] (--service [serviceName])
 
-
-## 
+ 
