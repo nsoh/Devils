@@ -1,40 +1,58 @@
 {
-    "generateTask" : [
-         {
-            "handlerKey" : "service",
-            "views" : []
-         },
-         {
-             "handlerKey": "action",
-             "views" : [
-                 {
-                    "filePath" : "Action/${ActionName}Action.cs",
-                    "generateCode" : [
-                        "class ${ActionName}Action",
+    "new" : [
+        {
+            "Type" : "service",
+            "ProcessTasks" : [
+                {
+                    "FileName" : "dotnet",
+                    "Arguments" : "new classlib -o ${command:dir}${command:service}"                     
+                }
+            ],
+            "GenerateTasks" : [
+                {
+                    "FileName" : "${command:dir}${command:service}/service.json",
+                    "Arguments" : [
                         "{",
-                        "   // TODO :???",
+                        "   \"version\" : \"0.0.1\",",
+                        "   \"name\" : \"${command:service}\"",
                         "}"
-                    ]        
-                 },
-                 {
-                    "filePath" : "Proto/${ActionName}Request.cs",
-                    "generateCode" : [
-                        "class ${ActionName}Request",
+                    ]
+                }
+            ]
+        },
+        {
+            "Type" : "action",
+            "ProcessTasks" : [],
+            "GenerateTasks" : [
+                {
+                    "FileName" : "${command:action}Action.cs",
+                    "Arguments" : [
+                        "using System;",
+                        "",
+                        "namespace ${config:service}.Action",
                         "{",
-                        "   // TODO :???",
+                        "   class ${command:action}Action",
+                        "   {",
+                        "       // TODO : ???",
+                        "   }",
                         "}"
-                    ]        
-                 },
-                 {
-                    "filePath" : "Proto/${ActionName}Response.cs",
-                    "generateCode" : [
-                        "class ${ActionName}Response",
+                    ]
+                },
+                {
+                    "FileName" : "${command:action}Config.json",
+                    "Arguments" : [
                         "{",
-                        "   // TODO :???",
+                        "   \"${action}Request\" : ",
+                        "       {",
+                        "       },",
+                        "   \"${action}Response\" : ",
+                        "       {",
+                        "       }",
                         "}"
-                    ]        
-                 }
-             ]
-         }
-     ]
+                    ]
+                }
+            ]
+        }
+
+    ]
  }
