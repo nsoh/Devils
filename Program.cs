@@ -14,7 +14,7 @@ namespace Devils
             }
 
             Config config = new Config("Config.json");
-            Command command = config.Parse(args[0], args[1]);
+            Command command = config.ParseCommand(args[0], args[1]);
             command.Run(args);
 
         }

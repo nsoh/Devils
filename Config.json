@@ -5,16 +5,16 @@
             "ProcessTasks" : [
                 {
                     "FileName" : "dotnet",
-                    "Arguments" : "new classlib -o ${command:dir}${command:service}"                     
+                    "Arguments" : "new classlib -o ${command:path}${command:service}"                     
                 }
             ],
             "GenerateTasks" : [
                 {
-                    "FileName" : "${command:dir}${command:service}/service.json",
+                    "FileName" : "${command:path}${command:service}/service.config.json",
                     "Arguments" : [
                         "{",
                         "   \"version\" : \"0.0.1\",",
-                        "   \"name\" : \"${command:service}\"",
+                        "   \"service\" : \"${command:service}\"",
                         "}"
                     ]
                 }
@@ -25,27 +25,51 @@
             "ProcessTasks" : [],
             "GenerateTasks" : [
                 {
-                    "FileName" : "${command:action}Action.cs",
+                    "FileName" : "${command:path}/${command:action}Action.cs",
                     "Arguments" : [
                         "using System;",
+                        "using DevilCore;",
                         "",
-                        "namespace ${config:service}.Action",
+                        "namespace ${config:service}",
                         "{",
-                        "   class ${command:action}Action",
+                        "   public delegate void ${command:action}ActionCallback(GameContext gameContext, ${command:action}Response response);",
+                        "",
+                        "   public class ${command:action}Action",
+                        "       : IAction<${command:action}Request, ${command:action}Response>",
                         "   {",
-                        "       // TODO : ???",
+                        "       public ${command:action}ActionCallback On${command:action}ActionCallback;",
+                        "       ",
+                        "       public ${command:action}Response OnRequest(GameContext gameContext, ${command:action}Request request)",
+                        "       {",
+                        "           ${command:action}Response response = new ${command:action}Response();",
+                        "           ",
+                        "           // TODO : request 정보를 이용해 gameContext를 업데이트한다.",
+                        "           ",
+                        "           return response;",
+                        "       }",
+                        "       ",
+                        "       ",
+                        "       public void OnResponse(GameContext gameContext, ${command:action}Response response)",
+                        "       {",
+                        "           ",
+                        "           // TODO : request 정보를 이용해 gameContext를 업데이트한다.",
+                        "           ",
+                        "           if(On${command:action}ActionCallback != null) {",
+                        "               On${command:action}ActionCallback(gameContext, response);",
+                        "           }",
+                        "       }",
                         "   }",
                         "}"
                     ]
                 },
                 {
-                    "FileName" : "${command:action}Config.json",
+                    "FileName" : "${command:path}/${command:action}.config.json",
                     "Arguments" : [
                         "{",
-                        "   \"${action}Request\" : ",
+                        "   \"${command:action}Request\" : ",
                         "       {",
                         "       },",
-                        "   \"${action}Response\" : ",
+                        "   \"${command:action}Response\" : ",
                         "       {",
                         "       }",
                         "}"

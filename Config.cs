@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Devils
 {
-    class Config
+    public class Config
     {
         JObject m_Data;
 
@@ -21,7 +21,12 @@ namespace Devils
             }
         }
 
-        public Command Parse(string command, string type)
+        public string Parse(string key)
+        {
+            return m_Data[key].ToString();
+        }
+
+        public Command ParseCommand(string command, string type)
         {
             List<Command> commands = JsonConvert.DeserializeObject<List<Command>>(m_Data[command].ToString());
             return commands.Where(x => x.Type == type).SingleOrDefault();

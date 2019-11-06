@@ -4,7 +4,7 @@ using Devils.Task;
 
 namespace Devils
 {
-    class Command
+    public class Command
     {
         public string Type { get; set; }
         public ProcessTask[] ProcessTasks { get; set; }

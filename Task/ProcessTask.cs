@@ -5,37 +5,25 @@ using System.Diagnostics;
 
 namespace Devils.Task
 {
-    class ProcessTask : ConfigBase
+    public class ProcessTask : TaskBase
     {
         public string FileName { get; set; }
         public string Arguments { get; set; }
 
         public override bool Run(string[] args)
         {
-            string[] cmdVars = ExtractCommandVariable(Arguments);
-            foreach(var var in cmdVars)
+            string parseArgumnets = ParseEnviromentVar(Arguments, args);
+            if(parseArgumnets == string.Empty)
             {
-                int index = Array.IndexOf(args, var);
-                if(index == -1)
-                {
-                    index = Array.IndexOf(args, "--" + var);
-                    if(index == -1)
-                    {
-                        Console.WriteLine("not found \'${{0}}\' in command.", var);
-                        return false;
-                    }
-                }
-
-                Arguments = ConvertCommandVariable(Arguments, var, args[index + 1]);
+                return false;
             }
-
 
             Process process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = FileName,
-                    Arguments = Arguments,
+                    Arguments = parseArgumnets,
                     UseShellExecute = true,
                     RedirectStandardOutput = false,
                     RedirectStandardError = false,
