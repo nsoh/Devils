@@ -1,0 +1,133 @@
+{
+    "new" : [
+        {
+            "name" : "service",
+            "tasks" : [
+                {
+                    "type" : "process",
+                    "filePath" : "dotnet",
+                    "parameters" : [
+                        "new classlib -o ${command:path}${command:service}"                     
+                    ]
+                },
+                {
+                    "type" : "generate",
+                    "filePath" : "${command:path}${command:service}/service.config.json",
+                    "parameters" : [
+                        "{",
+                        "   \"version\" : \"0.0.1\",",
+                        "   \"service\" : \"${command:service}\"",
+                        "}"
+                    ]
+                },
+                {
+                    "type" : "generate",
+                    "filePath" : "${command:path}${command:service}/${command:service}.csproj",
+                    "parameters" : [
+                        "<ItemGroup>",
+                        "   <Reference Include=\"DevilCore\">",
+                        "       <HintPath>../DevilCore/bin/Debug/netstandard2.0/DevilCore.dll</HintPath>",
+                        "   </Reference>",
+                        "</ItemGroup>" 
+                    ]
+                }
+            ]
+        },
+        {
+            "name" : "action",
+            "tasks" : [
+                {
+                    "type" : "generate",
+                    "filePath" : "${command:path}Action/${command:action}.cs",
+                    "parameters" : [
+                        "using System;",
+                        "using DevilCore;",
+                        "",
+                        "namespace ${config:service}.Action",
+                        "{",
+                        "   public delegate void ${command:action}Callback(GameContext gameContext, ${command:action}Response response);",
+                        "",
+                        "   public class ${command:action}",
+                        "       : IAction<${command:action}Request, ${command:action}Response>",
+                        "   {",
+                        "       public ${command:action}Callback On${command:action}Callback;",
+                        "       ",
+                        "       public ${command:action}Response OnRequest(GameContext gameContext, ${command:action}Request request)",
+                        "       {",
+                        "           ${command:action}Response response = new ${command:action}Response();",
+                        "           ",
+                        "           // TODO : request 정보를 이용해 gameContext를 업데이트한다.",
+                        "           ",
+                        "           return response;",
+                        "       }",
+                        "       ",
+                        "       ",
+                        "       public void OnResponse(GameContext gameContext, ${command:action}Response response)",
+                        "       {",
+                        "           ",
+                        "           // TODO : request 정보를 이용해 gameContext를 업데이트한다.",
+                        "           ",
+                        "           if(On${command:action}Callback != null) {",
+                        "               On${command:action}Callback(gameContext, response);",
+                        "           }",
+                        "       }",
+                        "   }",
+                        "}"
+                    ]
+                },
+                {
+                    "type" : "generate",
+                    "filePath" : "${command:path}Action/${command:action}.config.json",
+                    "parameters" : [
+                        "{",
+                        "   \"action\" : \"${command:action}\",",
+                        "   \"proto\" : ",
+                        "       { ",
+                        "           \"request\" : [",
+                        "               {",
+                        "                   \"var\" : \"hello\",",
+                        "                   \"type\" : \"string\",",
+                        "                   \"comment\" : \"this is sample request variable\"",
+                        "               }",
+                        "           ],",
+                        "           \"response\" : [",
+                        "               {",
+                        "                   \"var\" : \"hello\",",
+                        "                   \"type\" : \"string\",",
+                        "                   \"comment\" : \"this is sample request variable\"",
+                        "               }",
+                        "           ]",
+                        "       }",
+                        "}"
+                    ]
+                }
+            ]            
+        }
+    ],
+    "restore" : [
+        {
+            "name" : "action",
+            "tasks" : [
+                {
+                    "type" : "restore",
+                    "filePath" : "${command:path}Action/${command:action}Proto.cs",
+                    "restore" : [
+                        "${command:path}Action/${command:action}.config.json",
+                        "proto"
+                    ],
+                    "parameters" : [
+                        "using System;",
+                        "using System.Collections.Generic;",
+                        "",
+                        "namespace ${config:service}.Action",
+                        "{",
+                        "   class ${command:action}Request",
+                        "   {",
+                        "   }",
+                        "}"
+                    ]
+                }
+            ]
+        }
+    ]
+ }

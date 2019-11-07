@@ -13,10 +13,14 @@ namespace Devils
                 return;
             }
 
-            Config config = new Config("Config.json");
-            Command command = config.ParseCommand(args[0], args[1]);
-            command.Run(args);
+            CommandExecutor cmdExecutor = new CommandExecutor();
+            if(cmdExecutor.Parse("Command/command.config.json", args) == false)
+            {
+                Console.WriteLine("failed to parse command. {0}", string.Join(',', args));
+                return;
+            }
 
+            cmdExecutor.Run();
         }
     }
 }

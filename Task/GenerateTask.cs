@@ -1,30 +1,41 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 
 namespace Devils.Task
 {
     public class GenerateTask : TaskBase
     {
-        public string FileName { get; set; }
-        public string[] Arguments { get; set; }
-
-        public override bool Run(string[] args)
+        public override bool Run()
         {
-            string parseFileName = ParseEnviromentVar(FileName, args);
-            if(parseFileName == string.Empty)
+            // 파일 생성
+            if(File.Exists(FilePath) == false)
             {
-                return false;
-            }
-            
-            using (StreamWriter sw = File.CreateText(parseFileName))    
-            { 
-                foreach(var line in Arguments)
+                int index = FilePath.LastIndexOf('/');
+                if(index != -1)
                 {
-                    string parseLine = ParseEnviromentVar(line, args);
-                    sw.WriteLine(parseLine);    
-                }
-            }    
+                    string targetDir = FilePath.Substring(0, index);
+                    DirectoryInfo dir = new DirectoryInfo(targetDir);
+                    if(!dir.Exists)
+                    {
+                        Directory.CreateDirectory(targetDir);
+                    }
+                }      
+
+                File.WriteAllLines(FilePath, Parameters);
+                return true;
+            }
+
+
+            // 파일에 text를 추가한다.
+            List<string> allLines = File.ReadLines(FilePath).ToList();
+            string lastLine = allLines[allLines.Count - 1];
+            allLines.RemoveAt(allLines.Count - 1);
+            allLines.AddRange(Parameters);
+            allLines.Add(lastLine);
+            File.WriteAllLines(FilePath, allLines);
 
             return true;
         }

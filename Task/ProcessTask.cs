@@ -7,23 +7,14 @@ namespace Devils.Task
 {
     public class ProcessTask : TaskBase
     {
-        public string FileName { get; set; }
-        public string Arguments { get; set; }
-
-        public override bool Run(string[] args)
+        public override bool Run()
         {
-            string parseArgumnets = ParseEnviromentVar(Arguments, args);
-            if(parseArgumnets == string.Empty)
-            {
-                return false;
-            }
-
             Process process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = FileName,
-                    Arguments = parseArgumnets,
+                    FileName = FilePath,
+                    Arguments = Parameters[0],
                     UseShellExecute = true,
                     RedirectStandardOutput = false,
                     RedirectStandardError = false,
