@@ -109,20 +109,22 @@
             "name" : "action",
             "tasks" : [
                 {
-                    "type" : "restore",
-                    "filePath" : "${command:path}Action/${command:action}Proto.cs",
-                    "restore" : [
-                        "${command:path}Action/${command:action}.config.json",
-                        "proto"
-                    ],
+                    "type" : "proto",
+                    "filePath" : "${command:path}Action/${command:action}.config.json",
                     "parameters" : [
                         "using System;",
                         "using System.Collections.Generic;",
                         "",
                         "namespace ${config:service}.Action",
                         "{",
-                        "   class ${command:action}Request",
+                        "   public class ProtoRequest${command:action}",
                         "   {",
+                        "       public ${proto:request} { get; set; }",
+                        "   }",
+                        "   ",
+                        "   public class ProtoResponse${command:action}",
+                        "   {",
+                        "       public ${proto:response:type} ${proto:response:var} { get; set; } //${proto:response:comment}",
                         "   }",
                         "}"
                     ]

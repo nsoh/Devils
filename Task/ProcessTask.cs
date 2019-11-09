@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Devils.Task
 {
-    public class ProcessTask : TaskBase
+    public class ProcessTask : BaseTask
     {
         public override bool Run()
         {
@@ -14,7 +15,7 @@ namespace Devils.Task
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = FilePath,
-                    Arguments = Parameters[0],
+                    Arguments = Parameters.SingleOrDefault(),
                     UseShellExecute = true,
                     RedirectStandardOutput = false,
                     RedirectStandardError = false,

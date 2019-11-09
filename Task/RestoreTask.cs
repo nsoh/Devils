@@ -1,20 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Diagnostics;
 using Devils;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Devils.Task
 {
-    public class RestoreTask : TaskBase
+    public class RestoreTask : BaseTask
     {
-        public string RestorePath { get; set; }
-
         public override bool Run()
         {
-            CommandConfig config = new CommandConfig(RestorePath);
-            //config.Parse("")
-
             return true;
         }
     }

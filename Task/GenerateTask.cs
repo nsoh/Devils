@@ -6,10 +6,13 @@ using System.Linq;
 
 namespace Devils.Task
 {
-    public class GenerateTask : TaskBase
+    public class GenerateTask : BaseTask
     {
         public override bool Run()
         {
+            // string parsedFileName = config.ParseText(this, FilePath, args).FirstOrDefault();
+            // string[] parsedParameters = config.ParseText(this, Parameters, args);
+
             // 파일 생성
             if(File.Exists(FilePath) == false)
             {
@@ -28,15 +31,13 @@ namespace Devils.Task
                 return true;
             }
 
-
-            // 파일에 text를 추가한다.
+            // 파일의 끝에 추가한다.
             List<string> allLines = File.ReadLines(FilePath).ToList();
             string lastLine = allLines[allLines.Count - 1];
             allLines.RemoveAt(allLines.Count - 1);
             allLines.AddRange(Parameters);
             allLines.Add(lastLine);
             File.WriteAllLines(FilePath, allLines);
-
             return true;
         }
     }

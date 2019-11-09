@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Devils.Task;
 
 namespace Devils
 {
@@ -13,14 +13,13 @@ namespace Devils
                 return;
             }
 
-            CommandExecutor cmdExecutor = new CommandExecutor();
-            if(cmdExecutor.Parse("Command/command.config.json", args) == false)
+
+            TaskHandler handler = new TaskHandler("task.config.json");
+            if(handler.Run(args) == false)
             {
-                Console.WriteLine("failed to parse command. {0}", string.Join(',', args));
+                Console.WriteLine("failed to init task handler.");
                 return;
             }
-
-            cmdExecutor.Run();
         }
     }
 }
