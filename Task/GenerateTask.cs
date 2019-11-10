@@ -10,9 +10,6 @@ namespace Devils.Task
     {
         public override bool Run()
         {
-            // string parsedFileName = config.ParseText(this, FilePath, args).FirstOrDefault();
-            // string[] parsedParameters = config.ParseText(this, Parameters, args);
-
             // 파일 생성
             if(File.Exists(FilePath) == false)
             {

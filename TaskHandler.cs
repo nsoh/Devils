@@ -5,15 +5,16 @@ using System.IO;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Devils.Task;
 using Devils.Parser;
 
 
-namespace Devils.Task
+namespace Devils
 {
     class TaskHandler
     {
         static readonly string beginDelimiter = "${";
-         static readonly string endDelimiter = "${";
+         static readonly string endDelimiter = "}";
        
         JsonConfig m_Config;
 
@@ -100,40 +101,42 @@ namespace Devils.Task
 
         bool ParseContext(BaseTask[] tasks, string[] args)
         {
+            string[] outText = null;
             foreach(var t in tasks)
             {
-                string[] lines = ParseTaskContext(t, t.FilePath, args);
-                if(lines == null)
+                t.FilePath = ParseTaskContext(t, t.FilePath, args, out outText);
+                
+                List<string> resultText = new List<string>();
+                for(var i = 0; i < t.Parameters.Length; i++)
                 {
-                    return false;
-                }
-
-                t.FilePath = lines.First();
-
-                List<string> tempParams = new List<string>();
-                foreach(var param in t.Parameters)
-                {
-                    lines = ParseTaskContext(t, param, args);
-                    if(lines == null)
+                    string tempText = ParseTaskContext(t, t.Parameters[i], args, out outText);
+                    if(outText != null)
                     {
-                        return false;
+                        resultText.AddRange(outText);
                     }
-
-                    tempParams.AddRange(lines);
+                    else
+                    {
+                        resultText.Add(tempText);
+                    }
                 }
 
-                t.Parameters = tempParams.ToArray(); 
+                t.Parameters = resultText.ToArray();
             }
 
             return true;
         }
 
-        string[] ParseTaskContext(BaseTask task, string text, string[] args)
+        string ParseTaskContext(BaseTask task, string text, string[] args, out string[] outText)
         {
-            List<string> resultContexts = new List<string>();
+            outText = null;
             string[] contexts = m_Config.ExtractContext(text, beginDelimiter, endDelimiter);
+            if(contexts.Length == 0)
+            {
+                return text;
+            }
 
-
+            string resultText = text;
+            List<string> resultContexts = new List<string>();
             foreach(var ctx in contexts)
             {
                 string[] words = ctx.Split(':');
@@ -148,10 +151,10 @@ namespace Devils.Task
                     return null;
                 }
 
-                resultContexts.AddRange(parser.Run(task, text, words, args));
+                resultText = parser.Run(task, resultText, words, args, out outText);
             }
 
-            return resultContexts.ToArray();
+            return resultText;
         }
     }
 }

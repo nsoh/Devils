@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 
-namespace Devils.Task
+namespace Devils
 {
     class JsonConfig
     {

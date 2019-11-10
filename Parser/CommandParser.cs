@@ -7,8 +7,9 @@ namespace Devils.Parser
     {
         static readonly string delimiter = "${command:";
 
-        public override string[] Run(BaseTask task, string text, string[] ctx, string[] args)
+        public override string Run(BaseTask task, string text, string[] ctx, string[] args, out string[] outText)
         {
+            outText = null;
             int index = Array.IndexOf(args, ctx[1]);
             if(index == -1)
             {
@@ -19,8 +20,7 @@ namespace Devils.Parser
                 }
             }
 
-            text = ReplaceText(text, delimiter, ctx[1], args[index + 1]);
-            return new string[]{ text };
+            return ReplaceText(text, delimiter, ctx[1], args[index + 1]);
         }
     }
 }

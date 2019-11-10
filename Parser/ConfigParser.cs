@@ -7,16 +7,26 @@ namespace Devils.Parser
     {
         static readonly string delimiter = "${config:";
 
-        public override string[] Run(BaseTask task, string text, string[] ctx, string[] args)
+        public override string Run(BaseTask task, string text, string[] ctx, string[] args, out string[] outText)
         {
+            outText = null;
             int index = Array.IndexOf(args, "--path");
             if(index == -1)
             {
                 return null;
             }
 
-            text = ReplaceText(text, delimiter, ctx[1], args[index + 1]);
-            return new string[]{ text };
+            string value = string.Empty;
+            string path = args[index + 1];
+            index = path.LastIndexOf('/', path.Length - 1);
+            if(index != -1)
+            {
+                int startIndex = path.LastIndexOf('/', index - 1) + 1;
+                value = path.Substring(startIndex, index - startIndex);
+            }
+
+
+            return ReplaceText(text, delimiter, ctx[1], value);
         }
     }
 }
