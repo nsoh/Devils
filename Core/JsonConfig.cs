@@ -10,6 +10,9 @@ namespace Devils
     // json 스크립트의 데이터를 취급한다.
     class JsonConfig
     {
+        static readonly string beginDelimiter = "${";
+        static readonly string endDelimiter = "}";
+
         JObject m_JObject;
 
 
@@ -35,7 +38,7 @@ namespace Devils
 
 
         // 문자열에서 구분자 사이에 포함된 문자열을 추출한다.
-        public string[] ExtractText(string text, string beginDelimiter, string endDelimiter)
+        public string[] ExtractText(string text)
         {
             List<string> resultValue = new List<string>();
             int index = text.IndexOf(beginDelimiter, 0);

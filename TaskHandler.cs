@@ -11,14 +11,17 @@ using Devils.Parser;
 
 namespace Devils
 {
+    // task를 취급하는 기능을 한다.
+    // json파일에 설정된 task를 생성하고 구분을 분석하여 task의 내용을 완성시킨다.
+    // 그리고 해당 task를 실행한다.
     class TaskHandler
     {
-        static readonly string beginDelimiter = "${";
-         static readonly string endDelimiter = "}";
-       
+        // task 설정 json스크립트
         JsonConfig m_Config;
 
+        // 구문 분석기 
         Dictionary<string, BaseParser> m_Parsers;
+
 
         public TaskHandler(string configFile)
         {
@@ -31,6 +34,8 @@ namespace Devils
           };
         }
 
+
+        // task를 실행한다.
         public void Run(string[] args)
         {
             // task 생성
@@ -42,8 +47,8 @@ namespace Devils
             }
 
 
-            // task 구문 분석
-            ParseContext(tasks, args);
+            // task 분석
+            ParseTask(tasks, args);
 
 
             // task 실행
@@ -54,6 +59,7 @@ namespace Devils
         }
 
 
+        // task를 생성한다.
         BaseTask[] CreateTask(string command, string name)
         {
             JArray cmdArray = JArray.Parse(m_Config.Parse(command));
@@ -99,17 +105,21 @@ namespace Devils
         }
 
 
-        void ParseContext(BaseTask[] tasks, string[] args)
+        // task의 각종 데이터를 분석한다.
+        void ParseTask(BaseTask[] tasks, string[] args)
         {
             string[] outText = null;
             foreach(var t in tasks)
             {
-                t.FilePath = ParseTaskContext(t, t.FilePath, args, out outText);
+                // 파일 경로명을 완성한다
+                t.FilePath = ParseContext(t, t.FilePath, args, out outText);
                 
+
+                // 인자로 사용될 문자열을 완성한다.
                 List<string> resultText = new List<string>();
                 for(var i = 0; i < t.Parameters.Length; i++)
                 {
-                    string tempText = ParseTaskContext(t, t.Parameters[i], args, out outText);
+                    string tempText = ParseContext(t, t.Parameters[i], args, out outText);
                     if(outText != null)
                     {
                         resultText.AddRange(outText);
@@ -124,14 +134,17 @@ namespace Devils
             }
         }
 
-        string ParseTaskContext(BaseTask task, string text, string[] args, out string[] outText)
+
+        // 문자열내에 지정된 환경변수를 분석하여 문자열을 실행 가능한 상태로 완성시킨다.
+        string ParseContext(BaseTask task, string text, string[] args, out string[] outText)
         {
             outText = null;
-            string[] contexts = m_Config.ExtractText(text, beginDelimiter, endDelimiter);
+            string[] contexts = m_Config.ExtractText(text);
             if(contexts.Length == 0)
             {
                 return text;
             }
+            
 
             string resultText = text;
             List<string> resultContexts = new List<string>();
