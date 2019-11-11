@@ -6,9 +6,10 @@ using System.Linq;
 
 namespace Devils.Task
 {
+    // 프로세스 실행 task
     public class ProcessTask : BaseTask
     {
-        public override bool Run()
+        public override void Run()
         {
             Process process = new Process
             {
@@ -25,7 +26,6 @@ namespace Devils.Task
 
             process.Start();
             process.WaitForExit();
-            return true;
         }
     }
 }

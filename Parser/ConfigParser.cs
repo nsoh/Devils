@@ -3,6 +3,7 @@ using Devils.Task;
 
 namespace Devils.Parser
 {
+    // config 파일의 구문을 분석한다.
     class ConfigParser : BaseParser
     {
         static readonly string delimiter = "${config:";
@@ -13,7 +14,8 @@ namespace Devils.Parser
             int index = Array.IndexOf(args, "--path");
             if(index == -1)
             {
-                return null;
+                throw new DevilException(DevilErrorCode.ErrorTaskNotExists, 
+                    "invalid context:{0}", string.Join(' ', ctx));
             }
 
             string value = string.Empty;

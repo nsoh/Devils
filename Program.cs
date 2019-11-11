@@ -7,18 +7,24 @@ namespace Devils
     {
         static void Main(string[] args)
         {
-            if(args.Length < 1)
+            try
             {
-                Console.WriteLine("invalid args!!!");
-                return;
+                if(args.Length < 1)
+                {
+                    throw new DevilException(DevilErrorCode.ErrorUnknown, 
+                        "invalid args:{0}", string.Join(' ', args));
+                }
+
+                TaskHandler handler = new TaskHandler("task.config.json");
+                handler.Run(args);
+            } 
+            catch(DevilException e)
+            {
+                Console.WriteLine("[error:{0}] message:{1}", e.ErrorCode, e.Message);
             }
-
-
-            TaskHandler handler = new TaskHandler("task.config.json");
-            if(handler.Run(args) == false)
+            catch(Exception e)
             {
-                Console.WriteLine("failed to init task handler.");
-                return;
+                Console.WriteLine("[error] message:{0}", e.Message);
             }
         }
     }

@@ -7,9 +7,11 @@ using Newtonsoft.Json.Linq;
 
 namespace Devils
 {
+    // json 스크립트의 데이터를 취급한다.
     class JsonConfig
     {
         JObject m_JObject;
+
 
         public JsonConfig(string filePath)
         {
@@ -19,10 +21,12 @@ namespace Devils
             }           
         }
 
+
         public string Parse(string key)
         {
             return m_JObject[key].ToString();
         }
+
 
         public JObject ParseJObject(string key)
         {
@@ -30,7 +34,8 @@ namespace Devils
         }
 
 
-        public string[] ExtractContext(string text, string beginDelimiter, string endDelimiter)
+        // 문자열에서 구분자 사이에 포함된 문자열을 추출한다.
+        public string[] ExtractText(string text, string beginDelimiter, string endDelimiter)
         {
             List<string> resultValue = new List<string>();
             int index = text.IndexOf(beginDelimiter, 0);

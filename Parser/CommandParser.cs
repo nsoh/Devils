@@ -3,6 +3,7 @@ using Devils.Task;
 
 namespace Devils.Parser
 {
+    // 명령어 구문을 분석한다.
     class CommandParser : BaseParser
     {
         static readonly string delimiter = "${command:";
@@ -16,7 +17,8 @@ namespace Devils.Parser
                 index = Array.IndexOf(args, "--" + ctx[1]);
                 if(index == -1)
                 {
-                    return null;
+                    throw new DevilException(DevilErrorCode.ErrorTaskNotExists, 
+                        "invalid context:{0}", string.Join(' ', ctx));
                 }
             }
 

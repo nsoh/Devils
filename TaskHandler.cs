@@ -31,26 +31,26 @@ namespace Devils
           };
         }
 
-        public bool Run(string[] args)
+        public void Run(string[] args)
         {
-            // create task
+            // task 생성
             BaseTask[] tasks = CreateTask(args[0], args[1]);
-
-
-            // parsing task's context
-            if(ParseContext(tasks, args) == false)
+            if(tasks.Length == 0)
             {
-                return false;
+                throw new DevilException(DevilErrorCode.ErrorTaskNotExists, 
+                        "invalid args:{0}", string.Join(' ', args));
             }
 
 
-            // run task
+            // task 구문 분석
+            ParseContext(tasks, args);
+
+
+            // task 실행
             foreach(var t in tasks)
             {
                 t.Run();
             }            
-
-            return true;
         }
 
 
@@ -99,7 +99,7 @@ namespace Devils
         }
 
 
-        bool ParseContext(BaseTask[] tasks, string[] args)
+        void ParseContext(BaseTask[] tasks, string[] args)
         {
             string[] outText = null;
             foreach(var t in tasks)
@@ -122,14 +122,12 @@ namespace Devils
 
                 t.Parameters = resultText.ToArray();
             }
-
-            return true;
         }
 
         string ParseTaskContext(BaseTask task, string text, string[] args, out string[] outText)
         {
             outText = null;
-            string[] contexts = m_Config.ExtractContext(text, beginDelimiter, endDelimiter);
+            string[] contexts = m_Config.ExtractText(text, beginDelimiter, endDelimiter);
             if(contexts.Length == 0)
             {
                 return text;
@@ -142,13 +140,15 @@ namespace Devils
                 string[] words = ctx.Split(':');
                 if(words.Length < 2)
                 {
-                    return null;
+                    throw new DevilException(DevilErrorCode.ErrorTaskNotExists, 
+                        "invalid context:{0}", string.Join(' ', ctx));
                 }
                
                 BaseParser parser;
                 if(m_Parsers.TryGetValue(words[0], out parser) == false)
                 {
-                    return null;
+                    throw new DevilException(DevilErrorCode.ErrorTaskNotExists, 
+                        "not found parser. key:{0}", words[0]);
                 }
 
                 resultText = parser.Run(task, resultText, words, args, out outText);

@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Devils.Parser
 {
+    // 프로토콜 구문을 분석한다.
     class ProtoParser : BaseParser
     {
         static readonly string delimiter = "${proto:";
