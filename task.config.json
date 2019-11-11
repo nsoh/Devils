@@ -1,6 +1,18 @@
 {
     "new" : [
         {
+            "name" : "server",
+            "tasks" : [
+                {
+                    "type" : "process",
+                    "filePath" : "dotnet",
+                    "parameters" : [
+                        "new ${command:type} -o ${command:path}${command:server}"                     
+                    ]
+                }
+            ]
+        },
+        {
             "name" : "service",
             "tasks" : [
                 {
