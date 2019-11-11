@@ -16,7 +16,6 @@ namespace Devils.Task
             JsonConfig config = new JsonConfig(FilePath);
             string restoreFilePath = config.Parse("restoreFile");
             File.WriteAllLines(restoreFilePath, Parameters);
-
             return true;
         }
     }

@@ -13,7 +13,7 @@ namespace Devils
 
         public JsonConfig(string filePath)
         {
-             using (StreamReader r = new StreamReader(filePath))
+            using (StreamReader r = new StreamReader(filePath))
             {
                 m_JObject = JObject.Parse(r.ReadToEnd());
             }           

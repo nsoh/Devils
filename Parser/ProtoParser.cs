@@ -27,7 +27,7 @@ namespace Devils.Parser
 
 
                 string tempText = ReplaceText(text, delimiter, ctx[1], type + " " + v);
-                resultText.Add(tempText + " //" + comment);
+                resultText.Add(tempText + " " + comment);
             }
 
             outText = resultText.ToArray();
